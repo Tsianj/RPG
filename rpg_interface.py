@@ -12,9 +12,9 @@ class JeuRPG:
         
         # Charger les images des armes
         self.images_armes = {
-            "Guerrier": tk.PhotoImage(file="images/epee.png"),
-            "Archer": tk.PhotoImage(file="images/arc.png"),
-            "Mage": tk.PhotoImage(file="images/baton.png")
+            "Guerrier": tk.PhotoImage(file="images/guerrier.png"),
+            "Archer": tk.PhotoImage(file="images/archer.png"),
+            "Mage": tk.PhotoImage(file="images/mage.png")
         }
         
         self.personnages = []
