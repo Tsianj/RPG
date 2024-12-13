@@ -10,6 +10,13 @@ class JeuRPG:
         self.fenetre.title("Jeu RPG")
         self.fenetre.geometry("800x600")
         
+        # Charger les images des armes
+        self.images_armes = {
+            "Guerrier": tk.PhotoImage(file="images/epee.png"),
+            "Archer": tk.PhotoImage(file="images/arc.png"),
+            "Mage": tk.PhotoImage(file="images/baton.png")
+        }
+        
         self.personnages = []
         self.personnage_actuel = None
         self.monstre_actuel = None
@@ -72,16 +79,40 @@ class JeuRPG:
             ttk.Radiobutton(frame, text=classe, variable=classe_var, 
                           value=classe).pack()
 
+        # Création d'un label pour l'image
+        self.label_image = ttk.Label(frame)
+        self.label_image.pack(pady=10)
+
+        def mise_a_jour_image(*args):
+            classe = classe_var.get()
+            self.label_image.configure(image=self.images_armes[classe])
+
+        # Mettre à jour l'image quand la classe change
+        classe_var.trace('w', mise_a_jour_image)
+        
+        # Afficher l'image initiale
+        mise_a_jour_image()
+
         def confirmer():
             nom = nom_var.get()
             classe = classe_var.get()
             if nom:
+                # Déterminer l'arme de départ selon la classe
+                arme_depart = {
+                    "Guerrier": {"nom": "épée", "dégâts": 10},
+                    "Archer": {"nom": "arc", "dégâts": 8},
+                    "Mage": {"nom": "bâton", "dégâts": 12}
+                }[classe]
+                
                 nouveau_perso = {
                     "nom": nom,
                     "classe": classe,
                     "niveau": 1,
                     "points_de_vie": 100,
-                    "inventaire": [{"nom": "potion de soin", "quantité": 3}]
+                    "inventaire": [
+                        {"nom": "potion de soin", "quantité": 3},
+                        {"nom": arme_depart["nom"], "quantité": 1, "dégâts": arme_depart["dégâts"]}
+                    ]
                 }
                 self.personnages.append(nouveau_perso)
                 self.sauvegarder_personnages()
