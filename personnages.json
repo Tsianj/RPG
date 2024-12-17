@@ -1,1 +1,48 @@
-[{"nom": "Toto", "classe": "Guerrier", "niveau": 18, "points_de_vie": 283, "inventaire": [{"nom": "potion de soin", "quantit\u00e9": 17}]}]
+[
+    {
+        "nom": "Toto",
+        "classe": "Guerrier",
+        "niveau": 21,
+        "points_de_vie": 319,
+        "inventaire": [
+            {
+                "nom": "potion de soin",
+                "quantité": 20
+            }
+        ]
+    },
+    {
+        "nom": "Gandoulf",
+        "classe": "Mage",
+        "niveau": 19,
+        "points_de_vie": 158,
+        "inventaire": [
+            {
+                "nom": "potion de soin",
+                "quantité": 11
+            },
+            {
+                "nom": "bâton",
+                "quantité": 1,
+                "dégâts": 12
+            }
+        ]
+    },
+    {
+        "nom": "Dégoulass",
+        "classe": "Archer",
+        "niveau": 1,
+        "points_de_vie": 100,
+        "inventaire": [
+            {
+                "nom": "potion de soin",
+                "quantité": 3
+            },
+            {
+                "nom": "arc",
+                "quantité": 1,
+                "dégâts": 8
+            }
+        ]
+    }
+]

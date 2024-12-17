@@ -1,0 +1,28 @@
+{
+    "monstres": [
+        {
+            "nom": "Gobelin",
+            "points_de_vie": 50,
+            "degats_min": 5,
+            "degats_max": 15,
+            "loot": ["potion de soin", "pièces d'or"],
+            "image": "images/gobelin.png"
+        },
+        {
+            "nom": "Troll",
+            "points_de_vie": 100,
+            "degats_min": 10,
+            "degats_max": 25,
+            "loot": ["potion de soin", "épée rouillée"],
+            "image": "images/troll.png"
+        },
+        {
+            "nom": "Squelette",
+            "points_de_vie": 40,
+            "degats_min": 8,
+            "degats_max": 20,
+            "loot": ["os", "dague maudite"],
+            "image": "images/squelette.png"
+        }
+    ]
+}

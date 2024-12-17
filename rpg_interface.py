@@ -22,18 +22,28 @@ class JeuRPG:
         self.monstre_actuel = None
         
         self.charger_personnages()
+        self.charger_monstres()
         self.creer_menu_principal()
 
     def charger_personnages(self):
         """Charge les personnages sauvegardés"""
         if os.path.exists("personnages.json"):
-            with open("personnages.json", "r") as f:
+            with open("personnages.json", "r", encoding="UTF-8") as f:
                 self.personnages = json.load(f)
 
     def sauvegarder_personnages(self):
         """Sauvegarde les personnages"""
-        with open("personnages.json", "w") as f:
-            json.dump(self.personnages, f)
+        with open("personnages.json", "w", encoding="UTF-8") as f:
+            json.dump(self.personnages, f, indent=4)
+
+    def charger_monstres(self):
+        """Charge la liste des monstres depuis le fichier JSON"""
+        try:
+            with open("monstres.json", "r", encoding="UTF-8") as f:
+                self.liste_monstres = json.load(f)["monstres"]
+        except FileNotFoundError:
+            messagebox.showerror("Erreur", "Le fichier monstres.json est manquant!")
+            self.liste_monstres = []
 
     def creer_menu_principal(self):
         """Crée le menu principal"""
@@ -150,13 +160,30 @@ class JeuRPG:
         self.afficher_ecran_jeu()
 
     def generer_monstre(self):
-        """Génère un nouveau monstre"""
+        """Génère un nouveau monstre aléatoire à partir de la liste"""
+        if not self.liste_monstres:
+            # Fallback si pas de monstres dans le JSON
+            return {
+                "nom": f"Gobelin {random.randint(1,100)}",
+                "points_de_vie": 50,
+                "degats_min": 5,
+                "degats_max": 15,
+                "loot": ["potion de soin"]
+            }
+        
+        # Sélectionne un monstre aléatoire de la liste
+        monstre_base = random.choice(self.liste_monstres)
+        
+        # Crée une copie du monstre pour ne pas modifier l'original
         self.monstre_actuel = {
-            "nom": f"Gobelin {random.randint(1,100)}",
+            "nom": f"{monstre_base['nom']} Niv.{random.randint(1,3)}",
             "classe": "Monstre",
             "niveau": 1,
-            "points_de_vie": 50,
-            "inventaire": [{"nom": "potion de soin", "quantité": 1}]
+            "points_de_vie": monstre_base["points_de_vie"],
+            "degats_min": monstre_base["degats_min"],
+            "degats_max": monstre_base["degats_max"],
+            "inventaire": [{"nom": loot, "quantité": 1} for loot in monstre_base["loot"]],
+            "image": monstre_base.get("image", None)
         }
 
     def afficher_ecran_jeu(self):
@@ -186,6 +213,21 @@ class JeuRPG:
         ttk.Button(frame, text="Attaquer", command=self.attaquer).pack(pady=10)
         ttk.Button(frame, text="Utiliser potion", command=self.utiliser_potion).pack(pady=10)
         ttk.Button(frame, text="Quitter", command=self.creer_menu_principal).pack(pady=10)
+
+        # Affichage de l'image du monstre si disponible
+        if self.monstre_actuel.get("image"):
+            try:
+                image_monstre = tk.PhotoImage(file=self.monstre_actuel["image"])
+                label_image_monstre = ttk.Label(frame, image=image_monstre)
+                label_image_monstre.image = image_monstre  # Garde une référence
+                label_image_monstre.pack(pady=10)
+            except Exception as e:
+                print(f"Erreur lors du chargement de l'image: {e}")
+
+        # Liaisons de touches
+        self.fenetre.bind('<a>', lambda event: self.attaquer())  # Attaquer
+        self.fenetre.bind('<p>', lambda event: self.utiliser_potion())  # Utiliser potion
+        self.fenetre.bind('<q>', lambda event: self.creer_menu_principal())  # Quitter
 
     def attaquer(self):
         """Gère l'attaque du joueur vers le monstre et la contre-attaque"""
